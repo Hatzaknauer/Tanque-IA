@@ -21,12 +21,17 @@ public class FollowPath : MonoBehaviour
     }
     public void GoToHeli()
     {
+        //Passa ao método os pontos atuais e alvo para mover o agente [1]
         g.AStar(currentNode, wps[1]);
+        //Zera o contador de movimento
         currentWP = 0;
     }
+    //Método para se mover ao ponto ruina
     public void GoToRuin()
     {
+        //Passa ao método os pontos atuais e alvo para mover o agente [6]
         g.AStar(currentNode, wps[6]);
+        //Zera o contador de movimento
         currentWP = 0;
     }
 
@@ -35,6 +40,7 @@ public class FollowPath : MonoBehaviour
     {
         if (g.getPathLength() == 0 || currentWP == g.getPathLength())
             return;
+
         //O nó que estará mais próximo neste momento
         currentNode = g.getPathPoint(currentWP);
         //se estivermos mais próximo bastante do nó o tanque se moverá para o próximo
@@ -47,11 +53,15 @@ public class FollowPath : MonoBehaviour
 
         if (currentWP < g.getPathLength())
         {
+            //Define proximo ponto alvo do movimento
             goal = g.getPathPoint(currentWP).transform;
+            //Aloca próximo ponto em um vetor
             Vector3 lookAtGoal = new Vector3(goal.position.x,
             this.transform.position.y,
             goal.position.z);
+            //Utiliza o vetor para rotacionar em direção ao alvo
             Vector3 direction = lookAtGoal - this.transform.position;
+            //Rotaciona e move o objeto
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation,
             Quaternion.LookRotation(direction),
             Time.deltaTime * rotSpeed);
