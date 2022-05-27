@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class FollowPath : MonoBehaviour
 {
     Transform goal;
@@ -35,15 +36,23 @@ public class FollowPath : MonoBehaviour
         currentWP = 0;
     }
 
+    public void GoToPlant()
+    {
+        //Passa ao método os pontos atuais e alvo para mover o agente [9]
+        g.AStar(currentNode, wps[9]);
+        //Zera o contador de movimento
+        currentWP = 0;
+    }
+
     // Update is called once per frame
     void LateUpdate()
     {
         if (g.getPathLength() == 0 || currentWP == g.getPathLength())
             return;
 
-        //O nó que estará mais próximo neste momento
+        //Define o node atual
         currentNode = g.getPathPoint(currentWP);
-        //se estivermos mais próximo bastante do nó o tanque se moverá para o próximo
+        //Se estiver próximo o bastante do nó o tanque se moverá para o próximo
         if (Vector3.Distance(
         g.getPathPoint(currentWP).transform.position,
         transform.position) < accuracy)
@@ -51,6 +60,7 @@ public class FollowPath : MonoBehaviour
             currentWP++;
         }
 
+        //Enquanto o valor do node atual for menor que a quantidade de nodes no caminho, move o tanque
         if (currentWP < g.getPathLength())
         {
             //Define proximo ponto alvo do movimento
@@ -62,9 +72,10 @@ public class FollowPath : MonoBehaviour
             //Utiliza o vetor para rotacionar em direção ao alvo
             Vector3 direction = lookAtGoal - this.transform.position;
             //Rotaciona e move o objeto
+            this.transform.Translate(Vector3.forward * speed * Time.deltaTime);
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation,
             Quaternion.LookRotation(direction),
-            Time.deltaTime * rotSpeed);
+            rotSpeed * Time.deltaTime);
         }
     }
 }

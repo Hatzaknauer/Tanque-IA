@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,15 +28,18 @@ public class WPManager : MonoBehaviour
             foreach (Link l in links)
             {
                 graph.AddEdge(l.node1, l.node2);
+
                 if (l.dir == Link.direction.BI)
+                {
                     graph.AddEdge(l.node2, l.node1);
+                }
             }
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //Desenha o debug no scene
         graph.debugDraw();
     }
 }
